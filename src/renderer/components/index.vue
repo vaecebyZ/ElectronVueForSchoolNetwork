@@ -1,65 +1,67 @@
+<style src="../../../static/css/bootstrap.min.css"></style>
+<style src="../../../static/css/bootstrap-theme.min.css"></style>
+<style scoped>
+
+</style>
+
 <template>
   <div>
     <el-button @click.prevent="netWorkCheck()">nihao</el-button>
-    <H1>用户名：{{user}}</H1>
-    <H1>密&nbsp;码：{{pwd}}</H1>
+    <br>
+
+  
+      <h1><span class="element"></span></h1>
+  
+
   </div>
 </template>
 
+
 <script>
-  // var alertOnlineStatus = function() {
-  //       window.alert(navigator.onLine ? 'online' : 'offline');
-  //     };
-  //     window.addEventListener('online',  alertOnlineStatus);
-  //     window.addEventListener('offline',  alertOnlineStatus);
-  // alertOnlineStatus();
   import UidPwd from '../../../static/js/data/UidPwd';
-  import('../../../static/js/data/UidPwd');
+  import Typed from 'typed.js';
   export default {
     data() {
       return {
         user: '',
-        pwd: '',
+        pwd: '123',
+        yiyan: ['VAECEBYZ.....']
       }
     },
     methods: {
       netWorkCheck() {
-        if (window.navigator.onLine == true) {
+        
+        if (navigator.onLine == true) {
           let i = (Math.ceil(Math.random() * 2706));
-           this.user = UidPwd.User[i].name;
-           this.pwd = UidPwd.User[i].pwd;
-           
-          //   var currentProfile = {
-          //     name: '',
-          //   };       
-          // var currentProfileIndex = (UidPwd.User || []).findIndex((profile) => profile.name === currentProfile.name);
-          //  this.user =  UidPwd.User[currentProfileIndex].name;
-          //  this.pwd = UidPwd.User[currentProfileIndex].pwd;
-
+          this.user = UidPwd.User[i].name;
+          this.pwd = UidPwd.User[i].pwd;
+          //window.alert('设备在线');
           this.$message({
-            message: '程序网卡检测到连接',
+            message: '网卡检测到连接',
             type: 'success'
+          })
+
+          this.$http.get('https://api.muxiaoguo.cn/api/yiyan', {}).then(res => {
+            let data = res.data.data
+            let conte = [];
+            conte.push(data.constant + " ---" + data.source)
+            var typed = new Typed('.element', {
+              strings: conte,
+              typeSpeed: 30
+            });
           })
         } else {
           this.$message({
-            message: '程序网卡未检测到连接',
+            message: '网卡未检测到连接',
             type: 'error'
           })
         }
-        // this.$http.get('http://172.16.0.2/',{
-        // }).then(function(res){
-        //   console.log(res);
-        // })
+
       },
 
     },
     mounted() {
-
       this.netWorkCheck();
     }
   }
 </script>
-
-<style scoped>
-
-</style>
