@@ -6,13 +6,9 @@
 
 <template>
   <div>
-    <el-button @click.prevent="netWorkCheck()">nihao</el-button>
+    <el-button @click.prevent="">下一条</el-button>
     <br>
-
-  
-      <h1><span class="element"></span></h1>
-  
-
+      <h4><span class="yiyan"></span></h4>
   </div>
 </template>
 
@@ -24,41 +20,30 @@
     data() {
       return {
         user: '',
-        pwd: '123',
-        yiyan: ['VAECEBYZ.....']
+        pwd: '123'
       }
     },
     methods: {
       netWorkCheck() {
-        
-        if (navigator.onLine == true) {
           let i = (Math.ceil(Math.random() * 2706));
           this.user = UidPwd.User[i].name;
           this.pwd = UidPwd.User[i].pwd;
           //window.alert('设备在线');
-          this.$message({
-            message: '网卡检测到连接',
-            type: 'success'
-          })
-
           this.$http.get('https://api.muxiaoguo.cn/api/yiyan', {}).then(res => {
-            let data = res.data.data
+            let data = res.data.data;
             let conte = [];
             conte.push(data.constant + " ---" + data.source)
-            var typed = new Typed('.element', {
+            var typed = new Typed('.yiyan', {
               strings: conte,
               typeSpeed: 30
             });
+          }).catch(error=>{
+             this.$message({
+              message: '网卡未检测到连接',
+              type: 'error'
+              })
           })
-        } else {
-          this.$message({
-            message: '网卡未检测到连接',
-            type: 'error'
-          })
-        }
-
       },
-
     },
     mounted() {
       this.netWorkCheck();
