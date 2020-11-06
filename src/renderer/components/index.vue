@@ -1,11 +1,31 @@
-<style scoped>
-
+<style >
+html,body{
+  padding: 0px;
+  margin: 0px;
+}
+  .el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+  }
+  
+  .el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+  }
+  
 </style>
 
 <template>
   <div>
-    <el-button @click.prevent="">下一条</el-button>
-    <br>
+    <el-container>
+      <el-aside width="200px">Aside</el-aside>
+      <el-main> </el-main>
+      
+    </el-container>
     <b style="position: absolute;
     top:522px;
     right: 5px;"><span class="yiyan"></span></b>
@@ -16,9 +36,10 @@
 <script>
   import UidPwd from '../../../static/js/data/UidPwd';
   import Typed from 'typed.js';
-  export default {
-    data() {
 
+  export default {
+
+    data() {
       return {
         user: '',
         pwd: '123'
@@ -89,11 +110,9 @@
 
       },
       loginNet() {
-
         let i = (Math.ceil(Math.random() * 2706)); //选取幸运儿
         this.user = UidPwd.User[i].name;
         this.pwd = UidPwd.User[i].pwd;
-
         //尝试登录
         this.$http.get('http://172.16.0.2/drcom/login?callback=dr1003&DDDDD=' + UidPwd.User[i].name + '%40cmcc&upass=' +
           UidPwd.User[i].pwd + '&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&v=7051', {}).then(res => {
