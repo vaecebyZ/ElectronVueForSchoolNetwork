@@ -11,9 +11,8 @@
   .el-aside {
     background-color: #D3DCE6;
     color: #333;
-    height: 483px;
+    height: 543px;
     width: 200px ! important;
-    
   }
 
   .el-main {
@@ -31,11 +30,14 @@
 
         <div style="padding-top: 10%;padding-left: 10%;height: 70%;">
 
-          <el-steps :active="active" direction="vertical"  >
+          <el-steps :active="active" direction="vertical" finish-status="success">
             <el-step title="连接测试"></el-step>
             <el-step title="网络测试"></el-step>
-            <el-step title="心跳检测中♥。。"></el-step>
+            <el-step v-if="isStep" title="获取账号中"></el-step>
+            <el-step title="心跳检测中♥..."></el-step>
           </el-steps>
+
+
 
         </div>
 
@@ -43,11 +45,10 @@
 
       <el-main>
 
-
         <div>
-          <b style="position: absolute;top:463px;right: 5px;"><span class="yiyan"></span></b>
+          <b style="position: absolute;top:523px;right: 5px;"><span class="yiyan"></span></b>
         </div>
-
+        <el-button @click="addOne()">加一条</el-button>
       </el-main>
 
     </el-container>
@@ -66,19 +67,25 @@
         user: '',
         pwd: '',
         isInit: true,
-        active : 0
+        active: 0,
+        isStep:false
       }
     },
 
     methods: {
 
+        addOne(){
+            this.isStep =true;
+        },
+     
+
       //第一次测试--入口
       netWorkInit() {
 
-       this.active = 2;
+        this.active ++;
 
         this.$http.get('https://api.muxiaoguo.cn/api/yiyan', {}).then(res => {
-          
+
           //正确处理
           if (this.isInit) {
             this.$notify({
@@ -96,10 +103,10 @@
 
           conte.push(data.constant + " ---" + data.source)
 
-          this.active = 3
+          this.active++
 
           //屏蔽字符过长的语句
-          if (conte[0].length > 33) {
+          if (conte[0].length > 41) {
 
             console.log(conte[0].length);
 
@@ -113,7 +120,7 @@
               strings: conte,
               typeSpeed: 30
             });
-            
+
             this.onHartBeat(); //心跳
 
           }
@@ -122,6 +129,10 @@
 
           //请求失败
           console.log(error);
+
+          this.isStep=true;
+
+          this.active++;
 
           this.$message({
             message: '网卡未检测到连接',
@@ -196,17 +207,17 @@
       }
     },
     mounted() {
-       this.$message({
+      this.$message({
         message: "网络测试中",
         type: "warning"
       })
-      this.active = 1;
+      this.active ++;
       setTimeout(() => {
-         this.netWorkInit();
+        this.netWorkInit();
       }, 1500);
-     
 
-     
+
+
     }
   }
 </script>
