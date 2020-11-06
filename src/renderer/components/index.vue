@@ -1,34 +1,42 @@
-<style >
-html,body{
-  padding: 0px;
-  margin: 0px;
-}
+<style>
+  html,
+  body {
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+  }
+
+
   .el-aside {
     background-color: #D3DCE6;
     color: #333;
-    text-align: center;
-    line-height: 200px;
+    height: 543px;
+    /* text-align: center; */
+    /* height: 100%; */
   }
-  
+
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
+    /* text-align: center; */
+    /* height: 100%; */
   }
-  
 </style>
 
 <template>
   <div>
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
-      <el-main> </el-main>
-      
-    </el-container>
-    <b style="position: absolute;
+      <el-aside>Aside</el-aside>
+      <el-main>
+        <!-- <b style="position: absolute;
     top:522px;
-    right: 5px;"><span class="yiyan"></span></b>
+    right: 5px;"><span class="yiyan"></span></b> -->
+        <div><b><span style="position: absolute;
+    top:522px;
+    right: 5px;" class="yiyan"></span></b></div>
+      </el-main>
+    </el-container>
+
   </div>
 </template>
 
@@ -42,7 +50,9 @@ html,body{
     data() {
       return {
         user: '',
-        pwd: '123'
+        pwd: '123',
+        isInit: true,
+        isReGet:false
       }
     },
 
@@ -50,37 +60,14 @@ html,body{
 
       //第一次测试
       netWorkInit() {
-
-        this.$message({
-          message: "网络测试中",
-          type: "warning"
-        })
-
+       
         this.$http.get('https://api.muxiaoguo.cn/api/yiyan', {}).then(res => { //正确处理
 
-          this.$notify({
-
-            title: '网络链接正常',
-            message: '网络正常,开始冲浪咯o(*￣▽￣*)ブ',
-            type: 'success',
-            position: 'bottom-left'
-
-          });
-
-          let data = res.data.data;
-
-          let conte = [];
-
-          conte.push(data.constant + " ---" + data.source)
-
-          var typed = new Typed('.yiyan', { //文字展示
-            strings: conte,
-            typeSpeed: 30
-          });
-
-          this.onHartBeat(); //心跳
+          this.inItFunc(res.data.data);
 
         }).catch(error => {
+
+          console.log(error);
 
           this.$message({
             message: '网卡未检测到连接',
@@ -91,6 +78,42 @@ html,body{
 
         })
       },
+      inItFunc(resdata) {
+
+        if (this.isInit) {
+          this.$notify({
+            title: '网络链接正常',
+            message: '网络正常,开始冲浪咯o(*￣▽￣*)ブ',
+            type: 'success',
+            position: 'bottom-left'
+          });
+        }
+
+        this.isInit = false;
+
+        let data = resdata;
+        let conte = [];
+
+        conte.push(data.constant + " ---" + data.source)
+
+
+        if (conte[0].length > 33) {
+          console.log(conte[0].length);
+          this.netWorkInit();
+
+        } else {
+          this.isReGet = true;
+          var typed = new Typed('.yiyan', { //文字展示
+            strings: conte,
+            typeSpeed: 30
+          });
+        }
+          if(this.isReGet){
+              this.onHartBeat(); //心跳
+            }
+        
+      },
+
       onHartBeat() {
         setTimeout(() => {
           this.$http.get('https://api.muxiaoguo.cn/api/yiyan', {}).then(res => {
@@ -139,6 +162,10 @@ html,body{
       }
     },
     mounted() {
+       this.$message({
+          message: "网络测试中",
+          type: "warning"
+          })
       this.netWorkInit();
     }
   }
