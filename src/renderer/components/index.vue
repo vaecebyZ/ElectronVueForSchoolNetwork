@@ -8,10 +8,11 @@
 </style>
 
 <style scoped>
+
   #leftButton {
     width: 200px !important;
     color: rgb(80, 255, 27);
-    height: 144px;
+    height: 142px;
     background-color: black;
     margin: 0px;
     padding: 0px;
@@ -21,7 +22,7 @@
   #topleft {
     width: 200px !important;
     color: #333;
-    height: 543px;
+    height: 523px;
     background-color: #D3DCE6;
 
   }
@@ -31,6 +32,7 @@
     color: #333;
     padding: 0px;
   }
+
 </style>
 
 <template>
@@ -59,9 +61,7 @@
             </ul>
 
           </div>
-          <el-drawer title="我是标题" :visible.sync="drawer" :direction="direction" :with-header="false">
-            <span>我来啦!</span>
-          </el-drawer>
+       
         </el-aside>
 
 
@@ -73,6 +73,9 @@
           <b style="position: absolute;top:503px;right: 5px;"><span class="yiyan"></span></b>
         </div>
         <el-button @click="drawer = true" type="primary">清除消息</el-button>
+         <el-drawer :visible.sync="drawer" :direction="direction" :with-header="false">
+            <span>我来啦!</span>
+          </el-drawer>
       </el-main>
 
     </el-container>
@@ -110,7 +113,7 @@
 
         this.$nextTick(() => {
 
-          var div = document.getElementById('leftButton')
+          let div = document.getElementById('leftButton')
 
           div.scrollTop = div.scrollHeight
 
@@ -152,18 +155,21 @@
 
           //正确处理
           if (this.isInit) {
-            this.msgPush('网络连接正常✔');
+            this.msgPush('连接正常✔');
             this.$notify({
-              title: '网络链接正常✔',
+              title: '链接正常✔',
               message: '网络正常,开始冲浪咯o(*￣▽￣*)ブ',
               type: 'success',
               //position: 'bottom-left'
             });
           }
 
+          console
+
           this.isInit = false;
 
           let data = res.data.data;
+
           let conte = [];
 
           conte.push(data.constant + " ---" + data.source)
@@ -180,7 +186,7 @@
           } else {
 
             // this.isReGet = true;
-            var typed = new Typed('.yiyan', { //文字展示
+            const typed = new Typed('.yiyan', { //文字展示
               strings: conte,
               typeSpeed: 30
             });
@@ -197,7 +203,7 @@
           this.active++;
 
           this.$message({
-            message: '网卡未检测到连接❌',
+            message: '未检测到连接❌',
             type: 'error'
           })
 
@@ -216,9 +222,11 @@
         this.msgPush('尝试:' + this.user);
         this.$http.get('http://172.16.0.2/drcom/login?callback=dr1003&DDDDD=' + UidPwd.User[i].name + '%40cmcc&upass=' +
           UidPwd.User[i].pwd + '&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&v=7051', {}).then(res => {
+
           //返回反序列化
           let recode = JSON.parse(res.data.match(/[^\(\)]+(?=\))/g)[0]);
           // console.log(JSON.parse(res.data.match(/[^\(\)]+(?=\))/g)[0]));
+          
           if (recode.result == 1) {
             this.msgPush('成功接入✔');
             this.$notify({
@@ -240,7 +248,7 @@
         }).catch(error => {
 
           this.$message({
-            message: '网卡未检测到连接❌',
+            message: '未检测到连接❌',
             type: 'error'
           })
 
@@ -269,7 +277,7 @@
           }).catch(error => {
 
             this.$message({
-              message: '网卡未检测到连接❌',
+              message: '未检测到连接❌',
               type: 'error'
             })
 
@@ -286,7 +294,7 @@
       //   type: "warning"
       // })
 
-      this.msgPush('网络测试中...');
+      this.msgPush('测试中...');
 
       setTimeout(() => {
         this.active++;
