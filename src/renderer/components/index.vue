@@ -22,9 +22,8 @@
   #topleft {
     width: 200px !important;
     color: #333;
-    height: 523px;
+    height: 543px;
     background-color: #D3DCE6;
-
   }
 
   .el-main {
@@ -120,6 +119,16 @@
         })
 
       },
+
+      getReTime(date){
+          //补充0
+          if(date < 10){
+            return "0"+date
+          }else{
+            return date
+          }
+      },
+
       //获取时间
       msgPush(msgs) {
 
@@ -131,18 +140,14 @@
 
         let second = d.getSeconds(); //得到秒数
 
+
         let msg = {
-          time: hour + ":" + minute + ":" + second,
+          time: this.getReTime(hour) + ":" + this.getReTime(minute) + ":" + this.getReTime(second),
           title: msgs
         }
 
         this.count.push(msg)
 
-      },
-      addOne() {
-        this.count.push('233');
-        let msg = document.getElementById('teminial') // 获取对象
-        msg.scrollTop = msg.scrollHeight // 滚动高度
       },
 
       //第一次测试--入口
@@ -226,7 +231,7 @@
           //返回反序列化
           let recode = JSON.parse(res.data.match(/[^\(\)]+(?=\))/g)[0]);
           // console.log(JSON.parse(res.data.match(/[^\(\)]+(?=\))/g)[0]));
-          
+
           if (recode.result == 1) {
             this.msgPush('成功接入✔');
             this.$notify({
@@ -259,15 +264,14 @@
 
       //心跳检测
       onHartBeat() {
+
         setTimeout(() => {
+
           this.$http.get('https://api.muxiaoguo.cn/api/yiyan', {}).then(res => {
             // this.$message({
             //   message: '网卡检测到连接',
             //   type: 'success'
             // })
-
-
-
 
             this.msgPush('心跳测试❤');
             //console.log(msg.time);
@@ -300,8 +304,6 @@
         this.active++;
         this.netWorkInit();
       }, 1500);
-
-
 
     }
   }
